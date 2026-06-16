@@ -10,10 +10,16 @@ from modules.auth import require_permission, get_current_user
 from modules.forecast_service import (
     load_pending_forecasts, load_forecast_detail, sync_forecast_to_product,
     reject_forecast, load_forecast_sync_logs, rollback_forecast_sync,
+<<<<<<< HEAD
     annualize_demand, sync_all_forecasts,
 )
 from modules.formatting import fmt_int, fmt_pct, fmt_date
 from modules.forecasting_metrics import mape_quality
+=======
+    annualize_demand,
+)
+from modules.formatting import fmt_int, fmt_pct, fmt_date
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 
 st.set_page_config(page_title="Forecast Sync", page_icon="🔗", layout="wide")
 require_permission("forecast_sync")
@@ -55,6 +61,7 @@ else:
         },
     )
 
+<<<<<<< HEAD
     # ── Sync All (preview lalu konfirmasi) ──
     with st.container(border=True):
         st.markdown("**⚡ Sync Semua Forecast Pending**")
@@ -102,6 +109,8 @@ else:
                 st.session_state.pop("sync_all_preview", None)
                 st.caption("Muat ulang halaman untuk memperbarui daftar pending di atas.")
 
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
     st.divider()
     st.subheader("Aksi Sinkronisasi")
 
@@ -127,6 +136,7 @@ else:
                    "Periksa kembali sebelum sync.")
         allow_big = st.checkbox("Saya konfirmasi tetap melakukan sync meski perubahan besar.")
 
+<<<<<<< HEAD
     # Kualitas forecast berdasarkan MAPE.
     mape_sel = sel_row.get("MAPE")
     has_mape = mape_sel is not None and pd.notna(mape_sel)
@@ -145,6 +155,8 @@ else:
             st.error("Kualitas forecast buruk (MAPE >50%). "
                      "Hanya admin yang dapat meng-override sync ini.")
 
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
     with st.expander("🔍 Lihat detail forecast bulanan"):
         detail = load_forecast_detail(sel_run)
         if detail.empty:
@@ -156,10 +168,15 @@ else:
 
     c1, c2 = st.columns(2)
     with c1:
+<<<<<<< HEAD
         bad_block = (q_level == "bad") and not allow_bad
         sync_blocked = (not sku_found) or (big_change and not allow_big) or bad_block
         if st.button("✅ Sync Forecast Terpilih", type="primary",
                      use_container_width=True, disabled=sync_blocked):
+=======
+        if st.button("✅ Sync Forecast Terpilih", type="primary",
+                     use_container_width=True, disabled=not sku_found):
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
             ok, msg = sync_forecast_to_product(
                 sel_run, (user or {}).get("username"), allow_big_change=allow_big)
             st.success(msg) if ok else st.error(msg)

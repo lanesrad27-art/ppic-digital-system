@@ -14,6 +14,7 @@ from sqlalchemy import text
 
 from modules.auth import require_permission, get_current_user
 from modules.database import get_engine
+<<<<<<< HEAD
 from modules.inventory_service import load_products, save_demand_history
 from modules.forecast_service import (
     new_run_id, save_forecast_run_with_results, annualize_demand,
@@ -21,6 +22,14 @@ from modules.forecast_service import (
 from modules.validators import validate_demand_series, validate_forecast_horizon
 from modules.formatting import fmt_int
 from modules.forecasting_metrics import mape_quality
+=======
+from modules.inventory_service import load_products
+from modules.forecast_service import (
+    new_run_id, save_forecast_run, save_forecast_results, annualize_demand,
+)
+from modules.validators import validate_demand_series, validate_forecast_horizon
+from modules.formatting import fmt_int
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 from modules import (
     arima_forecaster as arima,
     ets_forecaster as ets,
@@ -34,6 +43,7 @@ user = get_current_user()
 
 st.title("📈 Demand Forecasting")
 
+<<<<<<< HEAD
 with st.expander("ℹ️ Dokumentasi Model Forecasting"):
     st.markdown(
         "- **ARIMA** — model statistik klasik untuk data bertren; order dipilih "
@@ -50,6 +60,8 @@ with st.expander("ℹ️ Dokumentasi Model Forecasting"):
         "(data dibagi train/test)."
     )
 
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 MODELS = ["Auto Select Best Model", "ARIMA", "ETS / Holt-Winters",
           "XGBoost / Gradient Boosting", "Croston / TSB"]
 
@@ -83,6 +95,7 @@ def _run_model(name: str, series, horizon: int) -> dict:
     return {"error": "Model tidak dikenal."}
 
 
+<<<<<<< HEAD
 def _auto_select(series, horizon: int) -> tuple[dict, pd.DataFrame, str]:
     """
     Jalankan model-model yang relevan, bandingkan metrik, pilih MAPE terkecil.
@@ -95,6 +108,12 @@ def _auto_select(series, horizon: int) -> tuple[dict, pd.DataFrame, str]:
     if info.get("intermittent"):
         candidates.append("Croston / TSB")
 
+=======
+def _auto_select(series, horizon: int) -> tuple[dict, pd.DataFrame]:
+    """Jalankan semua model valid, bandingkan metrik, pilih MAPE terkecil."""
+    candidates = ["ARIMA", "ETS / Holt-Winters",
+                  "XGBoost / Gradient Boosting", "Croston / TSB"]
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
     rows, results = [], {}
     for m in candidates:
         res = _run_model(m, series, horizon)
@@ -109,13 +128,18 @@ def _auto_select(series, horizon: int) -> tuple[dict, pd.DataFrame, str]:
             "Bias": metrics.get("Bias"), "_key": m,
         })
     if not rows:
+<<<<<<< HEAD
         return {"error": "Tidak ada model yang berhasil untuk data ini."}, pd.DataFrame(), ""
+=======
+        return {"error": "Tidak ada model yang berhasil untuk data ini."}, pd.DataFrame()
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
     comp = pd.DataFrame(rows)
     # Pilih berdasarkan MAPE; bila MAPE kosong, pakai RMSE.
     sort_key = "MAPE" if comp["MAPE"].notna().any() else "RMSE"
     comp_sorted = comp.sort_values(sort_key, na_position="last").reset_index(drop=True)
     best_key = comp_sorted.iloc[0]["_key"]
     best = results[best_key]
+<<<<<<< HEAD
 
     # Alasan pemilihan model (transparansi Auto Select).
     best_name = comp_sorted.iloc[0]["Model"]
@@ -133,6 +157,9 @@ def _auto_select(series, horizon: int) -> tuple[dict, pd.DataFrame, str]:
         if not info.get("intermittent"):
             reason += " Croston/TSB tidak diikutkan karena demand tidak intermittent."
     return best, comp_sorted.drop(columns=["_key"]), reason
+=======
+    return best, comp_sorted.drop(columns=["_key"])
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 
 
 # ──────────────────────────────────────────
@@ -178,6 +205,7 @@ else:
                 periods = pd.to_datetime(df_up["demand_period"]).tolist()
             st.success(f"{len(series)} titik data terbaca.")
             st.dataframe(df_up.head(), use_container_width=True, hide_index=True)
+<<<<<<< HEAD
             can_save = ("demand_period" in df_up.columns) and ("demand_qty" in df_up.columns)
             save_help = (None if can_save else
                          "Butuh kolom 'demand_period' dan 'demand_qty' untuk menyimpan.")
@@ -188,6 +216,8 @@ else:
                 ok_sv, msg_sv = save_demand_history(
                     product["sku"], df_up, source="upload", replace=replace_old)
                 st.success(msg_sv) if ok_sv else st.error(msg_sv)
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
         except Exception:
             st.error("Gagal membaca file. Pastikan ada kolom demand_qty.")
 
@@ -202,10 +232,16 @@ if st.button("🚀 Jalankan Forecast", type="primary", use_container_width=True)
     elif not ok_s:
         st.error(msg_s)
     else:
+<<<<<<< HEAD
         reason = ""
         with st.spinner("Menghitung forecast..."):
             if model_choice == "Auto Select Best Model":
                 best, comp, reason = _auto_select(series, horizon)
+=======
+        with st.spinner("Menghitung forecast..."):
+            if model_choice == "Auto Select Best Model":
+                best, comp = _auto_select(series, horizon)
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
             else:
                 best = _run_model(model_choice, series, horizon)
                 comp = pd.DataFrame()
@@ -216,7 +252,10 @@ if st.button("🚀 Jalankan Forecast", type="primary", use_container_width=True)
                 "best": best, "comp": comp, "series": series,
                 "periods": periods, "horizon": horizon,
                 "sku": product["sku"], "name": product["name"],
+<<<<<<< HEAD
                 "reason": reason,
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
             }
 
 # ──────────────────────────────────────────
@@ -230,8 +269,11 @@ if res:
     horizon = res["horizon"]
 
     st.success(f"Model terpilih: **{best.get('model_name')}**")
+<<<<<<< HEAD
     if res.get("reason"):
         st.caption(f"ℹ️ Alasan: {res['reason']}")
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 
     # Chart actual vs forecast + CI
     fig = go.Figure()
@@ -271,12 +313,15 @@ if res:
         mc = st.columns(5)
         for col, (k, v) in zip(mc, metrics.items()):
             col.metric(k, v)
+<<<<<<< HEAD
         m_val = metrics.get("MAPE")
         q_label, q_level = mape_quality(m_val)
         q_text = (f"Kualitas forecast — MAPE {float(m_val):.1f}% → {q_label}"
                   if m_val else f"Kualitas forecast — {q_label}")
         {"good": st.success, "info": st.info,
          "warn": st.warning, "bad": st.error}[q_level](q_text)
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 
     # Tabel perbandingan (Auto Select)
     if isinstance(res.get("comp"), pd.DataFrame) and not res["comp"].empty:
@@ -298,10 +343,14 @@ if res:
             "model_name": best.get("model_name"),
             "model_mape": metrics.get("MAPE"), "model_mae": metrics.get("MAE"),
             "model_rmse": metrics.get("RMSE"), "model_smape": metrics.get("sMAPE"),
+<<<<<<< HEAD
             "model_bias": metrics.get("Bias"),
             # window_size = jumlah observasi historis yang dipakai melatih model
             "window_size": int(best.get("window_size") or len(
                 [v for v in (series or []) if v is not None])),
+=======
+            "model_bias": metrics.get("Bias"), "window_size": len(series),
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
             "forecast_horizon": horizon, "created_by": (user or {}).get("username"),
         }
         rows = [{
@@ -311,8 +360,14 @@ if res:
             "lower_bound": r["lower_bound"], "upper_bound": r["upper_bound"],
             "model_name": best.get("model_name"), "model_mape": metrics.get("MAPE"),
         } for _, r in fc_table.iterrows()]
+<<<<<<< HEAD
         ok = save_forecast_run_with_results(meta, rows)
         if ok:
+=======
+        ok1 = save_forecast_run(meta)
+        ok2 = save_forecast_results(run_id, rows)
+        if ok1 and ok2:
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
             st.success("Forecast disimpan (status: pending). "
                        "Lanjut ke halaman Forecast Sync untuk sinkronisasi.")
             st.session_state.pop("fc_result", None)

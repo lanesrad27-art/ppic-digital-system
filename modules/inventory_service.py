@@ -247,6 +247,7 @@ def get_product_by_sku(sku: str) -> Optional[dict]:
     except Exception as e:  # noqa: BLE001
         logger.error("get_product_by_sku gagal: %s", e)
         return None
+<<<<<<< HEAD
 
 
 def save_demand_history(sku, df, source: str = "upload", replace: bool = False):
@@ -391,3 +392,5 @@ def import_products_csv(df, update_existing: bool = True):
     except Exception as e:  # noqa: BLE001
         logger.error("import_products_csv gagal: %s", e)
         return False, "Gagal mengimpor produk. Periksa format file.", {}
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82

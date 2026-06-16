@@ -73,6 +73,7 @@ def evaluate_forecast(actual, predicted) -> dict:
         "sMAPE": round(smape(actual, predicted), 4),
         "Bias": round(bias(actual, predicted), 4),
     }
+<<<<<<< HEAD
 
 
 def mape_quality(mape_value) -> tuple[str, str]:
@@ -93,3 +94,5 @@ def mape_quality(mape_value) -> tuple[str, str]:
     if m < 50:
         return ("Cukup (20–50%)", "warn")
     return ("Kurang akurat (>50%)", "bad")
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82

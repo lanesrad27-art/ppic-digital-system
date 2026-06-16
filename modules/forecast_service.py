@@ -115,6 +115,7 @@ def save_forecast_results(run_id: str, rows: list[dict]) -> bool:
         return False
 
 
+<<<<<<< HEAD
 def save_forecast_run_with_results(run_meta: dict, rows: list[dict]) -> bool:
     """
     Simpan metadata run (forecast_runs) + seluruh baris hasil (forecast_results)
@@ -177,6 +178,8 @@ def save_forecast_run_with_results(run_meta: dict, rows: list[dict]) -> bool:
         return False
 
 
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 # ──────────────────────────────────────────
 # Ambil data forecast
 # ──────────────────────────────────────────
@@ -291,15 +294,22 @@ def sync_forecast_to_product(
 
             sku = agg["product_sku"]
             prod = conn.execute(text(
+<<<<<<< HEAD
                 "SELECT annual_demand, annual_demand_source, last_forecast_sync_at "
                 "FROM products WHERE sku = :sku"
+=======
+                "SELECT annual_demand FROM products WHERE sku = :sku"
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
             ), {"sku": sku}).mappings().first()
             if not prod:
                 return False, f"SKU {sku} tidak ditemukan di products. Sync dibatalkan."
 
             old_demand = float(prod["annual_demand"] or 0)
+<<<<<<< HEAD
             old_source = prod["annual_demand_source"] or "manual"
             old_last_sync = prod["last_forecast_sync_at"]
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
             new_demand = annualize_demand(agg["total_demand"] or 0, agg["n_months"] or 0)
 
             # Guard perubahan ekstrem (> 50%).
@@ -325,6 +335,7 @@ def sync_forecast_to_product(
             conn.execute(text("""
                 INSERT INTO forecast_sync_logs
                     (run_id, product_sku, old_annual_demand, new_annual_demand,
+<<<<<<< HEAD
                      old_annual_demand_source, old_last_forecast_sync_at,
                      forecast_date, synced_by)
                 VALUES (:run_id, :sku, :old, :new, :old_src, :old_last, :fdate, :by)
@@ -332,6 +343,13 @@ def sync_forecast_to_product(
                 "run_id": run_id, "sku": sku, "old": old_demand,
                 "new": new_demand, "old_src": old_source, "old_last": old_last_sync,
                 "fdate": agg["last_period"], "by": synced_by,
+=======
+                     forecast_date, synced_by)
+                VALUES (:run_id, :sku, :old, :new, :fdate, :by)
+            """), {
+                "run_id": run_id, "sku": sku, "old": old_demand,
+                "new": new_demand, "fdate": agg["last_period"], "by": synced_by,
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
             })
 
             # 5. tandai forecast_results synced
@@ -339,9 +357,13 @@ def sync_forecast_to_product(
                 UPDATE forecast_results
                 SET sync_status = 'synced',
                     synced_by = :by,
+<<<<<<< HEAD
                     synced_at = CURRENT_TIMESTAMP,
                     reviewed_by = :by,
                     reviewed_at = CURRENT_TIMESTAMP
+=======
+                    synced_at = CURRENT_TIMESTAMP
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
                 WHERE run_id = :run_id AND sync_status = 'pending'
             """), {"by": synced_by, "run_id": run_id})
         clear_cache()
@@ -364,8 +386,13 @@ def reject_forecast(run_id: str, rejected_by: Optional[str] = None) -> tuple[boo
             res = conn.execute(text("""
                 UPDATE forecast_results
                 SET sync_status = 'rejected',
+<<<<<<< HEAD
                     reviewed_by = :by,
                     reviewed_at = CURRENT_TIMESTAMP
+=======
+                    synced_by = :by,
+                    synced_at = CURRENT_TIMESTAMP
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
                 WHERE run_id = :run_id AND sync_status = 'pending'
             """), {"by": rejected_by, "run_id": run_id})
         clear_cache()
@@ -393,6 +420,7 @@ def rollback_forecast_sync(log_id: int) -> tuple[bool, str]:
             if not log:
                 return False, "Log sync tidak ditemukan."
 
+<<<<<<< HEAD
             old_source = (log["old_annual_demand_source"]
                           if "old_annual_demand_source" in log else None) or "manual"
             old_last_sync = (log["old_last_forecast_sync_at"]
@@ -406,6 +434,15 @@ def rollback_forecast_sync(log_id: int) -> tuple[bool, str]:
                 WHERE sku = :sku
             """), {"old": log["old_annual_demand"], "src": old_source,
                    "old_last": old_last_sync, "sku": log["product_sku"]})
+=======
+            conn.execute(text("""
+                UPDATE products
+                SET annual_demand = :old,
+                    annual_demand_source = 'manual',
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE sku = :sku
+            """), {"old": log["old_annual_demand"], "sku": log["product_sku"]})
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 
             # Kembalikan status hasil forecast run terkait ke 'pending'.
             if log["run_id"]:
@@ -422,6 +459,7 @@ def rollback_forecast_sync(log_id: int) -> tuple[bool, str]:
     except Exception as e:  # noqa: BLE001
         logger.error("rollback_forecast_sync gagal: %s", e)
         return False, "Gagal melakukan rollback."
+<<<<<<< HEAD
 
 
 def sync_all_forecasts(synced_by, allow_big_change: bool = False):
@@ -455,3 +493,5 @@ def sync_all_forecasts(synced_by, allow_big_change: bool = False):
             detail.append({"sku": sku, "status": "gagal", "alasan": msg})
     summary = f"Sync All selesai: {synced} sukses, {skipped} dilewati, {failed} gagal."
     return (synced > 0), summary, detail
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82

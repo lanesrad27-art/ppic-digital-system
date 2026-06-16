@@ -151,6 +151,7 @@ def init_database(schema_dir: str = "sql") -> tuple[bool, str]:
         return False, "Inisialisasi database gagal. Periksa file SQL atau hak akses."
 
 
+<<<<<<< HEAD
 def seed_database(seed_file: str = "seed_data.sql", schema_dir: str = "sql") -> tuple[bool, str]:
     """
     Jalankan sql/seed_data.sql untuk mengisi data contoh.
@@ -197,6 +198,8 @@ def get_table_counts() -> dict:
     return counts
 
 
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 def clear_cache() -> None:
     """Bersihkan cache data Streamlit (dipanggil setelah operasi write)."""
     try:

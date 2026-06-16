@@ -42,6 +42,7 @@ def fmt_date(val, fmt: str = "%d/%m/%Y") -> str:
         return parsed.strftime(fmt)
     except (ValueError, TypeError):
         return str(val)
+<<<<<<< HEAD
 
 
 def to_excel_bytes(df, sheet_name: str = "Sheet1") -> bytes:
@@ -58,3 +59,5 @@ def to_excel_bytes(df, sheet_name: str = "Sheet1") -> bytes:
         return buffer.getvalue()
     except Exception:
         return df.to_csv(index=False).encode("utf-8")
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82

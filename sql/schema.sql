@@ -152,7 +152,12 @@ CREATE TABLE IF NOT EXISTS forecast_sync_logs (
 -- ------------------------------------------------------------
 CREATE INDEX IF NOT EXISTS idx_products_sku
     ON products (sku);
+<<<<<<< HEAD
 -- (index UNIK demand_history(product_sku, demand_period) dibuat di bagian migrasi)
+=======
+CREATE INDEX IF NOT EXISTS idx_demand_history_sku_period
+    ON demand_history (product_sku, demand_period);
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 CREATE INDEX IF NOT EXISTS idx_forecast_results_sku_date
     ON forecast_results (product_sku, forecast_period);
 CREATE INDEX IF NOT EXISTS idx_forecast_results_run_id
@@ -167,6 +172,7 @@ CREATE INDEX IF NOT EXISTS idx_forecast_runs_run_id
     ON forecast_runs (run_id);
 CREATE INDEX IF NOT EXISTS idx_forecast_runs_sku
     ON forecast_runs (product_sku);
+<<<<<<< HEAD
 
 -- ============================================================
 -- Migrasi kolom tambahan (idempoten, aman untuk DB lama & baru).
@@ -227,3 +233,5 @@ END $do$;
 
 CREATE UNIQUE INDEX IF NOT EXISTS ux_demand_history_sku_period
     ON demand_history (product_sku, demand_period);
+=======
+>>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
