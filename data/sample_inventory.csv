@@ -1,0 +1,11 @@
+sku,name,category,supplier,current_stock,safety_stock,annual_demand,annual_demand_source,ordering_cost,unit_cost,holding_cost_pct,lead_time_days
+BM-001,Baja Lembaran 2mm,Bahan Baku,PT Logam Jaya,420,80,12000,manual,75000,185000,20,14
+BM-002,Aluminium Profil,Bahan Baku,PT Logam Jaya,150,40,4800,manual,75000,92000,20,21
+KP-001,Kabel NYM 2.5mm,Komponen,CV Elektrindo,1300,250,36000,manual,40000,8500,22,7
+KP-002,Konektor RJ45,Komponen,CV Elektrindo,560,120,9600,manual,40000,1200,25,10
+KP-003,Bearing 6204,Komponen,PT Mesin Andal,80,30,2400,manual,55000,45000,18,30
+SP-001,Seal Pompa Khusus,Spare Part,PT Mesin Andal,12,5,120,manual,60000,320000,15,45
+SP-002,V-Belt A-50,Spare Part,PT Mesin Andal,95,25,1800,manual,50000,28000,20,20
+FG-001,Panel Box 40x60,Barang Jadi,Produksi Internal,60,15,1200,manual,90000,650000,18,5
+FG-002,Bracket Mounting,Barang Jadi,Produksi Internal,340,70,7200,manual,30000,42000,20,5
+CO-001,Cat Anti Karat 5L,Consumable,CV Kimia Warna,210,50,3600,manual,35000,135000,22,12
