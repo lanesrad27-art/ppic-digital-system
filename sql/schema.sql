@@ -152,32 +152,21 @@ CREATE TABLE IF NOT EXISTS forecast_sync_logs (
 -- ------------------------------------------------------------
 CREATE INDEX IF NOT EXISTS idx_products_sku
     ON products (sku);
-<<<<<<< HEAD
--- (index UNIK demand_history(product_sku, demand_period) dibuat di bagian migrasi)
-=======
-CREATE INDEX IF NOT EXISTS idx_demand_history_sku_period
-    ON demand_history (product_sku, demand_period);
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 CREATE INDEX IF NOT EXISTS idx_forecast_results_sku_date
     ON forecast_results (product_sku, forecast_period);
 CREATE INDEX IF NOT EXISTS idx_forecast_results_run_id
     ON forecast_results (run_id);
 CREATE INDEX IF NOT EXISTS idx_forecast_results_sync_status
     ON forecast_results (sync_status);
-
--- Index pendukung tambahan (tidak wajib, mempercepat join umum).
 CREATE INDEX IF NOT EXISTS idx_stock_transactions_product
     ON stock_transactions (product_id, transaction_date);
 CREATE INDEX IF NOT EXISTS idx_forecast_runs_run_id
     ON forecast_runs (run_id);
 CREATE INDEX IF NOT EXISTS idx_forecast_runs_sku
     ON forecast_runs (product_sku);
-<<<<<<< HEAD
 
 -- ============================================================
 -- Migrasi kolom tambahan (idempoten, aman untuk DB lama & baru).
---   forecast_results.reviewed_by / reviewed_at  -> jejak siapa me-review/menolak
---   forecast_sync_logs.old_annual_demand_source -> untuk rollback source lama
 -- ============================================================
 ALTER TABLE forecast_results   ADD COLUMN IF NOT EXISTS reviewed_by VARCHAR(50);
 ALTER TABLE forecast_results   ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMP;
@@ -186,10 +175,6 @@ ALTER TABLE forecast_sync_logs ADD COLUMN IF NOT EXISTS old_last_forecast_sync_a
 
 -- ------------------------------------------------------------
 -- Integritas referensial & keunikan (idempoten, aman dijalankan ulang).
---   - forecast_runs.run_id        -> UNIQUE (identitas satu eksekusi forecast)
---   - forecast_results.run_id     -> FK ke forecast_runs(run_id) ON DELETE CASCADE
---   - demand_history(sku, period) -> UNIQUE agar upsert tidak menggandakan periode
--- Dibungkus DO/EXCEPTION agar data lama yang melanggar tidak menggagalkan init.
 -- ------------------------------------------------------------
 
 -- 1) UNIQUE pada forecast_runs.run_id
@@ -205,7 +190,7 @@ BEGIN
     END IF;
 END $do$;
 
--- 2) FK forecast_results.run_id -> forecast_runs.run_id (butuh UNIQUE di atas)
+-- 2) FK forecast_results.run_id -> forecast_runs.run_id
 DO $do$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_forecast_results_run') THEN
@@ -233,5 +218,3 @@ END $do$;
 
 CREATE UNIQUE INDEX IF NOT EXISTS ux_demand_history_sku_period
     ON demand_history (product_sku, demand_period);
-=======
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
