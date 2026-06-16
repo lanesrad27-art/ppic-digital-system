@@ -3,15 +3,9 @@
 import pandas as pd
 import streamlit as st
 
-<<<<<<< HEAD
 from modules.auth import require_permission, get_current_user, has_permission
 from modules.inventory_service import load_stock_status, import_products_csv
 from modules.formatting import fmt_int, fmt_rp, fmt_date, to_excel_bytes
-=======
-from modules.auth import require_permission
-from modules.inventory_service import load_stock_status
-from modules.formatting import fmt_int, fmt_rp, fmt_date
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 
 st.set_page_config(page_title="Inventory", page_icon="📦", layout="wide")
 require_permission("inventory")
@@ -73,7 +67,6 @@ st.dataframe(
     },
 )
 
-<<<<<<< HEAD
 # ── Export ──
 ec1, ec2 = st.columns(2)
 with ec1:
@@ -129,22 +122,11 @@ with st.expander("📤 Import Inventory CSV"):
                "safety_stock, annual_demand, ordering_cost, unit_cost, "
                "holding_cost_pct, lead_time_days (opsional). "
                "Mengikuti format data/sample_inventory.csv.")
-=======
-# ── Export CSV ──
-csv = filtered.to_csv(index=False).encode("utf-8")
-st.download_button("⬇️ Export CSV", csv, "inventory_export.csv", "text/csv")
-
-# ── Upload CSV (opsional, preview saja) ──
-with st.expander("📤 Upload Inventory CSV (opsional)"):
-    st.caption("Format kolom mengikuti sample_inventory.csv. "
-               "Fitur ini menampilkan preview; impor ke DB dilakukan terpisah.")
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
     up = st.file_uploader("Pilih file CSV", type=["csv"], key="inv_upload")
     if up is not None:
         try:
             df_up = pd.read_csv(up)
             st.success(f"{len(df_up)} baris terbaca.")
-<<<<<<< HEAD
             st.caption("Preview 10 baris pertama:")
             st.dataframe(df_up.head(10), use_container_width=True, hide_index=True)
 
@@ -169,8 +151,5 @@ with st.expander("📤 Upload Inventory CSV (opsional)"):
                         st.rerun()
                     else:
                         st.error(msg_im)
-=======
-            st.dataframe(df_up.head(20), use_container_width=True, hide_index=True)
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
         except Exception:
             st.error("Gagal membaca file CSV. Periksa format.")

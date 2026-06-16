@@ -14,21 +14,14 @@ Proyek ini adalah penggabungan & perapian dari dua aplikasi terpisah
 | Modul | Deskripsi |
 |---|---|
 | 🏠 **Dashboard** | KPI ringkas (nilai inventory, stok kritis, reorder, overstock) + grafik status & ABC |
-<<<<<<< HEAD
 | 📦 **Inventory** | Tabel produk dengan EOQ/ROP/ABC, filter kategori/supplier/status, export CSV/Excel, import CSV |
-=======
-| 📦 **Inventory** | Tabel produk dengan EOQ/ROP/ABC, filter kategori/supplier/status, export CSV |
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 | 🔄 **Stock Transactions** | Input transaksi IN/OUT (role warehouse/admin) dengan proteksi stok negatif |
 | 📈 **Demand Forecasting** | ARIMA, ETS/Holt-Winters, XGBoost/Gradient Boosting, Croston/TSB + **Auto Select Best Model** |
 | 🔗 **Forecast Sync** | Sinkronkan hasil forecast ke annual demand produk + audit log + rollback |
 | 📊 **Forecast Insight** | Analisis perubahan demand, risiko stockout, rekomendasi EOQ/ROP terkini |
 | 🧮 **EOQ / ROP Calculator** | Kalkulator interaktif + visualisasi siklus persediaan (sawtooth) |
 | 👥 **User Management** | Kelola user & role (khusus admin) |
-<<<<<<< HEAD
 | 🩺 **System Health** | Status DB, jumlah baris tabel, cek ketersediaan paket model, inisialisasi & seed DB |
-=======
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 
 ### Model Forecasting
 - **ARIMA** — auto order via grid search AIC, uji stasioneritas ADF, confidence interval.
@@ -55,12 +48,8 @@ ppic-digital-system/
 │  ├─ 5_🔗_Forecast_Sync.py
 │  ├─ 6_📊_Forecast_Insight.py
 │  ├─ 7_🧮_EOQ_ROP_Calculator.py
-<<<<<<< HEAD
 │  ├─ 8_Users_Management.py
 │  └─ 9_System_Health.py
-=======
-│  └─ 8_👥_User_Management.py
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 ├─ modules/
 │  ├─ auth.py                  # login, role & permission (bcrypt + fallback)
 │  ├─ database.py              # koneksi PostgreSQL (SQLAlchemy)
@@ -113,12 +102,8 @@ cp .streamlit/secrets.example.toml .streamlit/secrets.toml
 
 ### 4. Siapkan database
 Skema & view dibuat otomatis saat aplikasi pertama dijalankan
-<<<<<<< HEAD
 (`schema.sql` + `views.sql`). Data contoh bisa dimuat dari halaman
 **System Health** (tombol *Inisialisasi Skema* & *Load Seed Data*), atau manual:
-=======
-(`schema.sql` + `views.sql`). Untuk mengisi data contoh, jalankan manual:
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 ```bash
 psql "$DATABASE_URL" -f sql/schema.sql
 psql "$DATABASE_URL" -f sql/views.sql
@@ -156,7 +141,6 @@ Demand History → Forecasting → Forecast Results → Sync Annual Demand
 
 ---
 
-<<<<<<< HEAD
 ## 🖼️ Screenshot & Demo Flow
 
 > Letakkan screenshot Anda di `docs/screenshots/` lalu sematkan, contoh:
@@ -182,8 +166,6 @@ Demand History → Forecasting → Forecast Results → Sync Annual Demand
 
 ---
 
-=======
->>>>>>> b9a8ad24d2e85e6ab546af78e0b7f10b26833f82
 ## 🧪 Testing
 ```bash
 pip install pytest
